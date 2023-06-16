@@ -1,48 +1,44 @@
-import { Handler,Context, APIGatewayProxyCallback } from "aws-lambda";
+import { Handler,Context, APIGatewayProxyCallback, APIGatewayEvent } from "aws-lambda";
 import * as nacl from "tweetnacl";
 import * as AWS from "aws-sdk";
 
-export const handler: Handler = async (event, context: Context, callback: APIGatewayProxyCallback) => {
-  // console.log(event);
-  // const PUBLIC_KEY = process.env.PUBLIC_KEY;
-  // const signature = event.headers["x-signature-ed25519"];
-  // const timestamp = event.headers["x-signature-timestamp"];
-  // const strBody = event.body; // should be string, for successful sign
+export const handler: Handler = async (event: APIGatewayEvent, context: Context, callback: APIGatewayProxyCallback) => {
 
-  // if (!PUBLIC_KEY) {
-  //   return {
-  //     statusCode: 401,
-  //     body: JSON.stringify("invalid request signature"),
-  //   };
-  // }
-  // const isVerified = nacl.sign.detached.verify(
-  //   Buffer.from(timestamp + strBody),
-  //   Buffer.from(signature, "hex"),
-  //   Buffer.from(PUBLIC_KEY, "hex")
-  // );
-  // console.log(JSON.stringify({ isVerified }));
-  // if (!isVerified) {
-  //   return {
-  //     statusCode: 401,
-  //     body: JSON.stringify("invalid request signature"),
-  //   };
-  // }
+  const PUBLIC_KEY = process.env.PUBLIC_KEY;
+  const signature = event?.headers?.["x-signature-ed25519"] ?? '';
+  const timestamp = event?.headers?.["x-signature-timestamp"] ?? '';
+  const strBody = event.body ?? ''; // should be string, for successful sign
 
-  // // Replying to ping (requirement 2.)
-  // const body = JSON.parse(strBody);
-  // console.log({ body });
-  // if (body.type === 1) {
-  //   return {
-  //     statusCode: 200,
-  //     body: JSON.stringify({ type: 1 }),
-  //   };
-  // }
+  if (!PUBLIC_KEY) {
+    return {
+      statusCode: 401,
+      body: JSON.stringify("invalid request signature"),
+    };
+  }
+  const isVerified = nacl.sign.detached.verify(
+    Buffer.from(timestamp + strBody),
+    Buffer.from(signature, "hex"),
+    Buffer.from(PUBLIC_KEY, "hex")
+  );
 
-  // console.log(JSON.stringify({ isShare: body.data.name === "share" }));
+  if (!isVerified) {
+    return {
+      statusCode: 401,
+      body: JSON.stringify("invalid request signature"),
+    };
+  }
 
-  const strBody = event.body;
+  // Replying to ping (requirement 2.)
+  const body = JSON.parse(strBody);
+  console.log({ body });
+  if (body.type === 1) {
+    return {
+      statusCode: 200,
+      body: JSON.stringify({ type: 1 }),
+    };
+  }
 
-  const body = JSON.parse(strBody)
+
 
   if (body.data.name === "share") {
     try {
@@ -57,7 +53,7 @@ export const handler: Handler = async (event, context: Context, callback: APIGat
           }),
         });
 
-        console.log(resultExec);
+
       }
     } catch (e) {
       console.log(e);
