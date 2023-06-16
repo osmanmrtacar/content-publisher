@@ -1,9 +1,16 @@
-import {Handler} from 'aws-lambda';
+import { Handler } from 'aws-lambda';
 import * as facebook from 'facebook-nodejs-business-sdk';
 
 export const handler: Handler = async (event, context) => {
   console.log(event);
   const accessToken = process.env.ACCESS_TOKEN;
+
+  if (!accessToken) {
+    return {
+      statusCode: 400,
+      message: "access token",
+    };
+  }
 
   const api = facebook.FacebookAdsApi.init(accessToken);
 
@@ -21,11 +28,11 @@ export const handler: Handler = async (event, context) => {
     // });
     // console.log(result.id);
   } catch (error) {
-    console.log(error.message);
+    console.log(error);
 
     return {
       statusCode: 400,
-      message: error.message,
+      message: JSON.stringify(error),
     };
   }
 
