@@ -59,7 +59,8 @@ export class SocialMediaContentCdkStack extends cdk.Stack {
           HELLO_TABLE_NAME: '',
         },
         timeout: cdk.Duration.seconds(30),
-        role: lambdaRole
+        role: lambdaRole,
+        functionName: "InstagramPublishLambda",
       }
     );
 
@@ -91,20 +92,10 @@ export class SocialMediaContentCdkStack extends cdk.Stack {
       definition,
     });
 
-    lambdaRole.addToPolicy(
-      new IAM.PolicyStatement({
-        resources: [
-          "arn:aws:states:"+this.region+":"+326312356751+":stateMachine:"+stateMachine.stateMachineName
-      ],
-        actions: [
-          "states:StartExecution"
-      ],
-        effect: IAM.Effect.ALLOW,
-    })
-    )
 
     const discordAuthLambda = new NodejsFunction(this, 'DiscordAuthHandler', {
       runtime: Lambda.Runtime.NODEJS_16_X,
+      functionName: "DiscordAuthLambda",
       entry: path.join(__dirname, `/../lambda/discord.ts`),
       handler: 'handler',
       environment: {
