@@ -48,4 +48,7 @@ export const handler: Handler = async (event: APIGatewayEvent, context: Context,
       },
     })
   })
+
+  return {success: true}
+
 };
