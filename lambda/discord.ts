@@ -47,7 +47,6 @@ export const handler: Handler = async (event: APIGatewayEvent, context: Context,
       if (process.env.STATE_MACHINE_ARN) {
         const resultExec = await step.startExecution({
           stateMachineArn: process.env.STATE_MACHINE_ARN,
-          name: "INSTAGRAM",
           input: JSON.stringify({
             platform: "instagram",
           }),
