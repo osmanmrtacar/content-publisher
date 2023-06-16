@@ -80,10 +80,17 @@ export class SocialMediaContentCdkStack extends cdk.Stack {
       error: 'Platform not okay',
     });
 
+    const success = new StepFunctions.Succeed(this, 'Content Published')
+
     const definition = new StepFunctions.Choice(this, 'Which Platform')
       .when(
         StepFunctions.Condition.stringEquals('$.platform', 'instagram'),
-        InstagramShare
+        InstagramShare.next(new StepFunctions.Choice(this, 'Did Successfully Share?')
+        .when(
+          StepFunctions.Condition.numberEquals('$.Payload.StatusCode', 200),
+          success
+          ).otherwise(fail)
+        )
       )
       .otherwise(fail);
 

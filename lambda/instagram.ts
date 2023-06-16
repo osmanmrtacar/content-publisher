@@ -19,7 +19,7 @@ export const handler: Handler = async (event, context) => {
   try {
     const media = await user.createMedia([], {
       image_url:
-        'https://d23.com/app/uploads/2019/05/1180-x-600_up-easter-eggs-1.jpg',
+        'https://instagram.fadb6-3.fna.fbcdn.net/v/t51.2885-15/240866834_1517414451940350_251164755129675443_n.jpg',
       caption:
         'Pixar, "Up"ın sonunu 14 yıl sonra yeniden yazdı! 😭🏠🎈',
     });
@@ -38,5 +38,8 @@ export const handler: Handler = async (event, context) => {
 
   return {
     statusCode: 200,
+    body: JSON.stringify({
+      StatusCode: 200
+    })
   };
 };
