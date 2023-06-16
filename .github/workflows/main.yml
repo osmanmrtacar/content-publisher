@@ -16,6 +16,8 @@ jobs:
     steps:
       - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
       - run: echo "🐧 This job is now running on a ${{ runner.os }} server hosted by GitHub!"
+      - name: Checkout repository
+        uses: actions/checkout@v2
       - name: Set up Node
         uses: actions/setup-node@v3
         with:
@@ -31,4 +33,4 @@ jobs:
       - name: ls
         run: ls ${PWD}
       - name: Deploy to AWS
-        run: cdk deploy --app="npx ts-node --prefer-ts-exts ${PWD}/bin/social-media-content-cdk.ts" --require-approval=never
+        run: cdk deploy --require-approval=never
