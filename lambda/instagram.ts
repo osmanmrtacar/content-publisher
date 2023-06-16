@@ -17,16 +17,16 @@ export const handler: Handler = async (event, context) => {
   const user = new facebook.IGUser('17841404434626251');
 
   try {
-    // const media = await user.createMedia([], {
-    //   image_url:
-    //     'https://ichef.bbci.co.uk/news/800/cpsprodpb/c4f0/live/ace78480-07ab-11ee-b5af-25e80c61c11a.jpg',
-    //   caption:
-    //     'Tom Holland, en son rol aldığı dizi yüzünden oyunculuğa bir yıl ara veriyor',
-    // });
-    // const result = await user.createMediaPublish([], {
-    //   creation_id: media.id,
-    // });
-    // console.log(result.id);
+    const media = await user.createMedia([], {
+      image_url:
+        'https://d23.com/app/uploads/2019/05/1180-x-600_up-easter-eggs-1.jpg',
+      caption:
+        'Pixar, "Up"ın sonunu 14 yıl sonra yeniden yazdı! 😭🏠🎈',
+    });
+    const result = await user.createMediaPublish([], {
+      creation_id: media.id,
+    });
+    console.log(result.id);
   } catch (error) {
     console.log(error);
 

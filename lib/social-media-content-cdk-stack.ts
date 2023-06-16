@@ -59,6 +59,7 @@ export class SocialMediaContentCdkStack extends cdk.Stack {
           HELLO_TABLE_NAME: '',
         },
         timeout: cdk.Duration.seconds(30),
+        role: lambdaRole
       }
     );
 
@@ -90,6 +91,18 @@ export class SocialMediaContentCdkStack extends cdk.Stack {
       definition,
     });
 
+    lambdaRole.addToPolicy(
+      new IAM.PolicyStatement({
+        resources: [
+          "arn:aws:states:"+this.region+":"+326312356751+":stateMachine:"+stateMachine.stateMachineName
+      ],
+        actions: [
+          "states:StartExecution"
+      ],
+        effect: IAM.Effect.ALLOW,
+    })
+    )
+
     const discordAuthLambda = new NodejsFunction(this, 'DiscordAuthHandler', {
       runtime: Lambda.Runtime.NODEJS_16_X,
       entry: path.join(__dirname, `/../lambda/discord.ts`),
@@ -97,6 +110,7 @@ export class SocialMediaContentCdkStack extends cdk.Stack {
       environment: {
         STATE_MACHINE_ARN: stateMachine.stateMachineArn,
       },
+      role: lambdaRole,
     });
 
     const DiscordAuthorization = new Tasks.LambdaInvoke(
