@@ -1,8 +1,8 @@
-import { Handler } from "aws-lambda";
+import { Handler,Context, APIGatewayProxyCallback } from "aws-lambda";
 import * as nacl from "tweetnacl";
 import * as AWS from "aws-sdk";
 
-export const handler: Handler = async (event, context) => {
+export const handler: Handler = async (event, context: Context, callback: APIGatewayProxyCallback) => {
   // console.log(event);
   // const PUBLIC_KEY = process.env.PUBLIC_KEY;
   // const signature = event.headers["x-signature-ed25519"];
@@ -63,16 +63,16 @@ export const handler: Handler = async (event, context) => {
       console.log(e);
     }
 
-    return {
+    callback(null, {
       statusCode: 200,
 
-      body: {
+      body: JSON.stringify({
         type: 4,
         data: {
           content: 'Hello, World.',
         },
-      },
-    };
+      })
+    })
   }
 
   console.log(404);
