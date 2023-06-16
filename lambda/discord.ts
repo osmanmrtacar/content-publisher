@@ -72,10 +72,4 @@ export const handler: Handler = async (event: APIGatewayEvent, context: Context,
       })
     })
   }
-
-  console.log(404);
-
-  return {
-    statusCode: 404, // If no handler implemented for Discord's request
-  };
 };

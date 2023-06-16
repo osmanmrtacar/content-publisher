@@ -1,7 +1,7 @@
-import { Handler } from 'aws-lambda';
+import { APIGatewayEvent, APIGatewayProxyCallback, Context, Handler } from 'aws-lambda';
 import * as facebook from 'facebook-nodejs-business-sdk';
 
-export const handler: Handler = async (event, context) => {
+export const handler: Handler = async (event: APIGatewayEvent, context: Context, callback: APIGatewayProxyCallback) => {
   console.log(event);
   const accessToken = process.env.ACCESS_TOKEN;
 
@@ -19,7 +19,7 @@ export const handler: Handler = async (event, context) => {
   try {
     const media = await user.createMedia([], {
       image_url:
-        'https://instagram.fadb6-3.fna.fbcdn.net/v/t51.2885-15/240866834_1517414451940350_251164755129675443_n.jpg',
+        'https://static1.moviewebimages.com/wordpress/wp-content/uploads/2022/04/Carl-Up-2009-Disney.jpg',
       caption:
         'Pixar, "Up"ın sonunu 14 yıl sonra yeniden yazdı! 😭🏠🎈',
     });
@@ -30,16 +30,22 @@ export const handler: Handler = async (event, context) => {
   } catch (error) {
     console.log(error);
 
-    return {
+    callback('Share Error', {
       statusCode: 400,
-      message: JSON.stringify(error),
-    };
+      body: JSON.stringify({
+        message: JSON.stringify(error),
+
+      })
+    })
   }
 
-  return {
+  callback(null, {
     statusCode: 200,
     body: JSON.stringify({
-      StatusCode: 200
+      type: 4,
+      data: {
+        content: 'Hello, World.',
+      },
     })
-  };
+  })
 };

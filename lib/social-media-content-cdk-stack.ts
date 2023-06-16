@@ -87,7 +87,7 @@ export class SocialMediaContentCdkStack extends cdk.Stack {
         StepFunctions.Condition.stringEquals('$.platform', 'instagram'),
         InstagramShare.next(new StepFunctions.Choice(this, 'Did Successfully Share?')
         .when(
-          StepFunctions.Condition.numberEquals('$.Payload.StatusCode', 200),
+          StepFunctions.Condition.numberEquals('$.Payload.statusCode', 200),
           success
           ).otherwise(fail)
         )
