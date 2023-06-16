@@ -52,6 +52,7 @@ export const handler: Handler = async (event: APIGatewayEvent, context: Context,
     const {imageUrl, caption} = platform?.options.reduce((acc, curr)=> {
       console.log(JSON.stringify(curr))
       return {
+        ...acc,
         ...(curr.name === 'image_url' ? { imageUrl: curr.value } : undefined),
         ...(curr.name === 'caption' ? { caption: curr.value } : undefined),
       }
