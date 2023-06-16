@@ -21,8 +21,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: ls
-        run: |
-          ls
+        run: ls
       - name: cdk synth
         uses: youyo/aws-cdk-github-actions@v2
         with:
