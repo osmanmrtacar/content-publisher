@@ -59,11 +59,16 @@ export const handler: Handler = async (event, context) => {
       console.log(e);
     }
 
-    return JSON.stringify({
-      // Note the absence of statusCode
-      type: 4, // This type stands for answer with invocation shown
-      data: { content: "bar" },
-    });
+    return {
+      statusCode: 200,
+
+      body: {
+        type: 4,
+        data: {
+          content: 'Hello, World.',
+        },
+      },
+    };
   }
 
   console.log(404);
