@@ -8,7 +8,7 @@ on:
 
 env:
   
-  AWS_REGION : <"eu-west-2"> #Change to reflect your Region
+  AWS_REGION : eu-west-2 #Change to reflect your Region
 
 jobs:
   build:
