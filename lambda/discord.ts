@@ -61,7 +61,7 @@ export const handler: Handler = async (event: APIGatewayEvent, context: Context,
       console.log(e);
     }
 
-    callback(null, {
+    return callback(null, {
       statusCode: 200,
 
       body: JSON.stringify({
@@ -72,6 +72,6 @@ export const handler: Handler = async (event: APIGatewayEvent, context: Context,
       })
     })
 
-    return {success: true}
+
   }
 };

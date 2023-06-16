@@ -30,7 +30,7 @@ export const handler: Handler = async (event: APIGatewayEvent, context: Context,
   } catch (error) {
     console.log(error);
 
-    callback('Share Error', {
+    return callback('Share Error', {
       statusCode: 400,
       body: JSON.stringify({
         message: JSON.stringify(error),
@@ -39,7 +39,7 @@ export const handler: Handler = async (event: APIGatewayEvent, context: Context,
     })
   }
 
-  callback(null, {
+  return callback(null, {
     statusCode: 200,
     body: JSON.stringify({
       type: 4,
@@ -49,6 +49,5 @@ export const handler: Handler = async (event: APIGatewayEvent, context: Context,
     })
   })
 
-  return {success: true}
 
 };
