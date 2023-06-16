@@ -50,6 +50,7 @@ export const handler: Handler = async (event: APIGatewayEvent, context: Context,
   if (body.data.name === "share") {
     const [platform] = body.data.options;
     const {imageUrl, caption} = platform?.options.reduce((acc, curr)=> {
+      console.log(JSON.stringify(curr))
       return {
         ...(curr.name === 'image_url' ? { imageUrl: curr.value } : undefined),
         ...(curr.name === 'caption' ? { caption: curr.value } : undefined),
@@ -68,7 +69,7 @@ export const handler: Handler = async (event: APIGatewayEvent, context: Context,
         })
       })
     }
-    
+
     try {
       const step = new AWS.StepFunctions();
 
