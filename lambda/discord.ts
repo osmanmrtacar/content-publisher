@@ -45,14 +45,17 @@ export const handler: Handler = async (event: APIGatewayEvent, context: Context,
       const step = new AWS.StepFunctions();
 
       if (process.env.STATE_MACHINE_ARN) {
-        const resultExec = step.startExecution({
+        const resultExec = await step.startExecution({
           stateMachineArn: process.env.STATE_MACHINE_ARN,
           name: "INSTAGRAM",
           input: JSON.stringify({
             platform: "instagram",
           }),
-        });
+        }).promise();
 
+
+
+        console.log(resultExec.executionArn)
 
       }
     } catch (e) {
