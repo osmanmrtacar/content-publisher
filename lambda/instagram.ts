@@ -15,7 +15,9 @@ export const handler: Handler = async (event: APIGatewayEvent, context: Context,
     };
   }
 
-  const instagramContent : InstagramContent = JSON.parse(event.body ?? '')
+  const stringBody = JSON.stringify(event.body)
+
+  const instagramContent : InstagramContent = JSON.parse(stringBody)
 
   const api = facebook.FacebookAdsApi.init(accessToken);
 
