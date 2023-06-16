@@ -9,7 +9,7 @@ export const handler: Handler = async (event: APIGatewayEvent, context: Context,
   const timestamp = event?.headers?.["x-signature-timestamp"] ?? '';
   const strBody = event.body ?? ''; // should be string, for successful sign
 
-  console.log(JSON.parse(strBody).data.options)
+  console.log(JSON.stringify(JSON.parse(strBody).data.options))
 
   if (!PUBLIC_KEY) {
     return {
