@@ -1,6 +1,9 @@
 import { Handler,Context, APIGatewayProxyCallback, APIGatewayEvent } from "aws-lambda";
 import * as nacl from "tweetnacl";
 import * as AWS from "aws-sdk";
+import { DiscordBody, DiscordInteraction, InstagramContent } from "../src/interfaces";
+
+
 
 export const handler: Handler = async (event: APIGatewayEvent, context: Context, callback: APIGatewayProxyCallback) => {
 
@@ -31,7 +34,9 @@ export const handler: Handler = async (event: APIGatewayEvent, context: Context,
   }
 
   // Replying to ping (requirement 2.)
-  const body = JSON.parse(strBody);
+  const body = JSON.parse(strBody) as DiscordBody;
+
+  
   console.log({ body });
   if (body.type === 1) {
     return {
@@ -43,6 +48,27 @@ export const handler: Handler = async (event: APIGatewayEvent, context: Context,
 
 
   if (body.data.name === "share") {
+    const [platform] = body.data.options;
+    const {imageUrl, caption} = platform?.options.reduce((acc, curr)=> {
+      return {
+        ...(curr.name === 'image_url' ? { imageUrl: curr.value } : undefined),
+        ...(curr.name === 'caption' ? { caption: curr.value } : undefined),
+      }
+    }, {} as InstagramContent)
+
+    if(!imageUrl || !caption){
+      return callback(null, {
+        statusCode: 200,
+  
+        body: JSON.stringify({
+          type: 4,
+          data: {
+            content: 'Not enough info',
+          },
+        })
+      })
+    }
+    
     try {
       const step = new AWS.StepFunctions();
 
@@ -50,7 +76,11 @@ export const handler: Handler = async (event: APIGatewayEvent, context: Context,
         const resultExec = await step.startExecution({
           stateMachineArn: process.env.STATE_MACHINE_ARN,
           input: JSON.stringify({
-            platform: "instagram",
+            platform: platform.name,
+            body: {
+              imageUrl,
+              caption
+            }
           }),
         }).promise();
 
@@ -69,7 +99,7 @@ export const handler: Handler = async (event: APIGatewayEvent, context: Context,
       body: JSON.stringify({
         type: 4,
         data: {
-          content: 'Hello, World.',
+          content: 'Requested',
         },
       })
     })
